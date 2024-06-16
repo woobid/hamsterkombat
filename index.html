@@ -82,7 +82,37 @@
     <p>Забудьте о необходимости заходить в игру каждые 3 часа – наш бот сделает всё за вас!</p>
 
     <a href="https://forms.gle/iMMVzzB4MStip2s89" class="btn">Подключить бота</a>
-    <p>Стоимость подключения к боту: 10 USDT / в месяц</p>
+    <script>
+      async function getExchangeRate() {
+        try {
+          const response = await fetch(
+            "https://api.coingecko.com/api/v3/simple/price?ids=the-open-network&vs_currencies=usd"
+          );
+          const data = await response.json();
+          return data["the-open-network"].usd;
+        } catch (error) {
+          console.error("Error fetching exchange rate:", error);
+          return null;
+        }
+      }
+
+      async function convert() {
+        const usdAmount = 10;
+
+        const exchangeRate = await getExchangeRate();
+        if (!exchangeRate) {
+          alert("Unable to fetch exchange rate. Please try again later.");
+          return;
+        }
+
+        const tonAmount = usdAmount / exchangeRate;
+        document.getElementById(
+          "price"
+        ).innerText = `${usdAmount} USD (${tonAmount.toFixed(2)} TON)`;
+      }
+
+      convert();
+    </script>
     
     <h3>Как работает наш бот:</h3>
     <ol>
